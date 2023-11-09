@@ -1,0 +1,31 @@
+{
+    "root": true,
+    "ignorePatterns": [
+      "dist/*",
+      "node_modules/*",
+      "jest.config.js",
+      "webpack.config.js"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint",
+      "react",
+      "prettier"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended",
+      "prettier"
+    ],
+    "rules": {
+        "@typescript-eslint/ban-ts-comment": "off",
+        "prettier/prettier": ["warn"],
+        // "import/no-unresolved": [2, { "devDependencies": true, "caseSensitive": false }],
+        "import/no-unresolved": "off"
+    },
+    "settings": {
+      "import/resolver": "webpack"
+    }
+  }
+  
