@@ -3,6 +3,16 @@ import ABIs from "../../config/ABIs/index";
 import {Web3Provider} from "./Web3Provider";
 
 class ERC20 {
+    static async tokenName(contractAddress: string) {
+        const erc20Contract = new ethers.Contract(
+            contractAddress,
+            ABIs.ERC20_PERMIT,
+            Web3Provider.getProvider()
+        );
+
+        return await erc20Contract.name();
+    }
+
     static async balanceOf(contractAddress: string, ownerAddress: string) {
         const erc20Contract = new ethers.Contract(
             contractAddress,
@@ -13,6 +23,16 @@ class ERC20 {
         const balance = await erc20Contract.balanceOf(ownerAddress);
 
         return ethers.formatEther(balance.toString());
+    }
+
+    static async nonces(contractAddress: string, ownerAddress: string) {
+        const erc20Contract = new ethers.Contract(
+            contractAddress,
+            ABIs.ERC20_PERMIT,
+            Web3Provider.getProvider()
+        );
+
+        return await erc20Contract.nonces(ownerAddress);
     }
 
     static async mint(
