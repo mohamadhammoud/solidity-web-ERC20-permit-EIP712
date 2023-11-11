@@ -14,4 +14,8 @@ contract Token is ERC20, ERC20Permit {
     ) payable ERC20(name, symbol) ERC20Permit(name) {
         _mint(msg.sender, 1_000_000_000 ether);
     }
+
+    function mint(address to, uint256 amount) external {
+        _mint(to, amount);
+    }
 }
