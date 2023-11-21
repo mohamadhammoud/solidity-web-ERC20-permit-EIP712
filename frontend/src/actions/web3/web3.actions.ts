@@ -1,3 +1,5 @@
+// import {signTypedData, SignTypedDataVersion} from "@metamask/eth-sig-util";
+
 import {ethers} from "ethers";
 import ERC20 from "../../utils/web3/ERC20";
 
@@ -41,7 +43,7 @@ async function ERC20_transferFrom(
     ERC20.transferFrom(signer, contractAddress, ownerAddress, spenderAddress, amount);
 }
 
-async function ERC20_permit(
+async function ERC20_Sign_Permit(
     signer: ethers.Signer,
     contractAddress: string,
     spenderAddress: string,
@@ -56,17 +58,24 @@ async function ERC20_permit(
         {name: "deadline", type: "uint256"}
     ];
 
+    // const EIP712DomainDefinition = [
+    //     {name: "name", type: "string"},
+    //     {name: "version", type: "string"},
+    //     {name: "chainId", type: "uint256"},
+    //     {name: "verifyingContract", type: "address"}
+    // ];
+
     const tokenDomainData = {
         name: await ERC20_name(contractAddress),
         version: "1",
         verifyingContract: contractAddress,
-        chainId: Number(signer.provider?.getNetwork())
+        chainId: Number((await signer.provider?.getNetwork())?.chainId)
     };
 
     const message = {
         owner: await signer.getAddress(),
         spender: spenderAddress,
-        value: value,
+        value: ethers.parseEther(value.toString()),
         nonce: await ERC20_nonces(contractAddress, await signer.getAddress()),
         deadline: deadline
     };
@@ -96,22 +105,28 @@ async function ERC20_permit(
 
     console.log({signature, verifiedAddress}, verifiedAddress === (await signer.getAddress()));
 
+    const signerAddress = await signer.getAddress();
+
     // Split the signature into v, r, and s values
     const r = signature.slice(0, 66);
     const s = "0x" + signature.slice(66, 130);
     const v = "0x" + signature.slice(130, 132);
 
-    ERC20.permit(
-        signer,
-        contractAddress,
-        await signer.getAddress(),
-        spenderAddress,
-        value,
-        deadline,
-        v,
-        r,
-        s
-    );
+    return {ownerAddress: signerAddress, spenderAddress, value, deadline, v, r, s};
+}
+
+async function ERC20_permit(
+    signer: ethers.Signer,
+    contractAddress: string,
+    ownerAddress: string,
+    spenderAddress: string,
+    value: number,
+    deadline: number,
+    v: string,
+    r: string,
+    s: string
+) {
+    ERC20.permit(signer, contractAddress, ownerAddress, spenderAddress, value, deadline, v, r, s);
 }
 
 export {
@@ -121,5 +136,6 @@ export {
     ERC20_mint,
     ERC20_transfer,
     ERC20_transferFrom,
+    ERC20_Sign_Permit,
     ERC20_permit
 };
