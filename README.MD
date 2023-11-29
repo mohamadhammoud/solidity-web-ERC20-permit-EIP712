@@ -3,7 +3,7 @@
 [![Node.js](https://img.shields.io/badge/Node.js-v14-blue)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-v4.4.2-blue)](https://www.typescriptlang.org/)
 [![Hardhat](https://img.shields.io/badge/Hardhat-v2.0.11-yellow)](https://hardhat.org/)
-[![Solidity](https://img.shields.io/badge/Solidity-v0.8.0-lightgrey)](https://docs.soliditylang.org/)
+[![Solidity](https://img.shields.io/badge/Solidity-blue)](https://docs.soliditylang.org/)
 
 # ERC20Permit: Hardhat & React Integration
 
